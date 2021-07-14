@@ -1,6 +1,7 @@
 import { DeepReadonly, reactive, readonly, ToRefs, toRefs, } from "vue"
 
-class VTStore<T extends Record<string, unknown>> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+class VTStore<T extends object> {
     private underlying: T
 
     constructor(initial: T) {

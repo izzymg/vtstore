@@ -5,10 +5,10 @@
     <button @click="addItem">Add item</button>
     <p>update count: {{ state.updateCount }}</p>
     <p>update count squared: {{ countSquared }}</p>
-    
+
     <section>
-        <label for="list-name">List name</label>
-        <input id="list-name" v-model="name">
+      <label for="list-name">List name</label>
+      <input id="list-name" v-model="name" />
     </section>
     <h2>{{ state.listName }}</h2>
 
@@ -21,23 +21,24 @@
 <script lang="ts">
 import { computed, defineComponent, watch, } from "vue"
 
-import { VTStore, } from "../lib/vtstore"
+import { VTStore, createStore } from "../lib/vtstore"
+
+// Define the data we'll use in the Store
+interface TodoData {
+  listName: string,
+  listItems: string[],
+  updateCount: number,
+}
 
 export default defineComponent({
   name: "Demo",
 
   setup() {
-    // Define the data we'll use in the Store
-    interface TodoData {
-      listName: string,
-      listItems: string[],
-      updateCount: number,
-    }
-
-
     // Initialize a new store with a default instance of the data.
-    const store = new VTStore<TodoData>({
-        listName: "default list", listItems: ["item 0"], updateCount: 0,
+    const store = createStore<TodoData>({
+      listName: "default list",
+      listItems: ["item 0"],
+      updateCount: 0,
     })
 
     // Create a method to mutate the store
@@ -46,8 +47,8 @@ export default defineComponent({
     }
 
     const name = computed({
-        get: () => store.state.listName,
-        set: (val: string) => store.mutate("listName", val),
+      get: () => store.state.listName,
+      set: (val) => store.mutate("listName", val),
     })
 
     // Watch a nested property in the store. If we just watched store.state, we'd get recursion
@@ -58,7 +59,7 @@ export default defineComponent({
 
     // Run our addItem a whole bunch
     const interval = setInterval(() => {
-      if(store.state.listItems.length > 50) {
+      if (store.state.listItems.length > 50) {
         clearInterval(interval)
         return
       }

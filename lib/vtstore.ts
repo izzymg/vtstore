@@ -1,19 +1,20 @@
-import { DeepReadonly, reactive, readonly, ToRefs, toRefs, } from "vue"
+import { reactive, readonly, toRefs, } from "vue"
+import type { DeepReadonly, ToRefs } from "vue"
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-class VTStore<T extends object> {
-    private underlying: T
+class VTStore<T extends Object> {
+  private _state: T
 
     constructor(initial: T) {
-        this.underlying = reactive(initial) as T
+    this._state = reactive(initial) as T
     }
 
-    public mutate<K extends keyof T>(key: K, val: T[K]): void {
-        this.underlying[key] = val
+  mutate<K extends keyof T>(key: K, val: T[K]): void {
+    this._state[key] = val
     }
 
     get state(): DeepReadonly<T> {
-        return readonly(this.underlying) as DeepReadonly<T>
+    return readonly(this._state) as DeepReadonly<T>
     }
 
     get refs(): ToRefs<DeepReadonly<T>> {

@@ -5,21 +5,23 @@ import type { DeepReadonly, ToRefs } from "vue"
 class VTStore<T extends Object> {
   private _state: T
 
-    constructor(initial: T) {
+  constructor(initial: T) {
     this._state = reactive(initial) as T
-    }
+  }
 
   mutate<K extends keyof T>(key: K, val: T[K]): void {
     this._state[key] = val
-    }
+  }
 
-    get state(): DeepReadonly<T> {
+  get state(): DeepReadonly<T> {
     return readonly(this._state) as DeepReadonly<T>
-    }
+  }
 
-    get refs(): ToRefs<DeepReadonly<T>> {
-        return toRefs(this.state)
-    }
+  get refs(): ToRefs<DeepReadonly<T>> {
+    return toRefs(this.state)
+  }
 }
 
-export { VTStore, }
+const createStore = <T extends Object>(initial: T) => new VTStore<T>(initial);
+
+export { VTStore, createStore }
